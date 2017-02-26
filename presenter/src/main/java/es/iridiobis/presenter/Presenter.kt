@@ -1,10 +1,10 @@
 package es.iridiobis.presenter
 
-abstract class Presenter<V> {
-    var view: V? = null
+abstract class Presenter<V> : Attachable<V> {
+    protected var view: V? = null
         private set
 
-    fun attach(view: V) {
+    override fun attach(view: V) {
         if (this.view != null) {
             throw IllegalStateException("Already attached to a view")
         }
@@ -12,7 +12,7 @@ abstract class Presenter<V> {
         onViewAttached()
     }
 
-    fun detach(view: V) {
+    override fun detach(view: V) {
         if (this.view == null) {
             throw IllegalStateException("Detaching a presenter not attached to a view")
         } else if (this.view !== view) {
@@ -22,7 +22,7 @@ abstract class Presenter<V> {
         this.view = null
     }
 
-    fun hasView() = view != null
+    protected fun hasView() = view != null
 
     abstract protected fun onViewAttached()
 

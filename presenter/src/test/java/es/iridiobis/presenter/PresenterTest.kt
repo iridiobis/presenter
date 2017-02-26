@@ -26,12 +26,12 @@ class PresenterTest {
 
     @Test
     fun hasView_beforeAttachment() {
-        assertFalse(presenter!!.hasView())
+        assertFalse(presenter!!.testHasView())
     }
 
     @Test
     fun getView_beforeAttachment() {
-        assertNull(presenter!!.view)
+        assertNull(presenter!!.testGetView())
     }
 
     @Test
@@ -46,8 +46,8 @@ class PresenterTest {
     fun attachView_default() {
         presenter!!.attach(view!!)
         verify<ProtectedTestHelper>(testHelper).testOnViewAttached()
-        assertTrue(presenter!!.hasView())
-        assertEquals(view, presenter!!.view)
+        assertTrue(presenter!!.testHasView())
+        assertEquals(view, presenter!!.testGetView())
     }
 
     @Test
@@ -71,8 +71,8 @@ class PresenterTest {
         verify<ProtectedTestHelper>(testHelper).testOnViewAttached()
         presenter!!.detach(view)
         verify<ProtectedTestHelper>(testHelper).testBeforeViewDetached()
-        assertFalse(presenter!!.hasView())
-        assertNull(presenter!!.view)
+        assertFalse(presenter!!.testHasView())
+        assertNull(presenter!!.testGetView())
     }
 
     interface View
@@ -83,6 +83,11 @@ class PresenterTest {
     }
 
     open class TestPresenter constructor(val testHelper: ProtectedTestHelper) : Presenter<View>() {
+
+        fun testHasView() = hasView()
+
+        fun testGetView() = view
+
         override fun onViewAttached() {
             testHelper.testOnViewAttached()
         }
